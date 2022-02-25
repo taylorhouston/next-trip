@@ -6,7 +6,7 @@ interface Props {
   onChange: ChangeEventHandler
   label: string
   value: string
-  data: any[]
+  data: any
 }
 export const InfoSelectBox = ({
   selectLabel,

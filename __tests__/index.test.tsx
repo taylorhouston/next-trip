@@ -5,7 +5,7 @@ import { RouterContext } from 'next/dist/shared/lib/router-context'
 import { createMockRouter } from '../_tests/createMockRouter'
 import Home from '../pages/index'
 
-global.fetchData = global.fetch = jest.fn((url: string) =>
+global.fetch = jest.fn((url: string) =>
   Promise.resolve({
     json: () => {
       switch (url) {
@@ -117,38 +117,12 @@ global.fetchData = global.fetch = jest.fn((url: string) =>
                 direction_text: 'SB',
                 schedule_relationship: 'Scheduled',
               },
-              {
-                actual: false,
-                trip_id: '20247154-DEC21-RAIL-Weekday-01',
-                stop_id: 51405,
-                departure_text: '11:15',
-                departure_time: 1645550100,
-                description: 'to Mall of America',
-                route_id: '901',
-                route_short_name: 'Blue',
-                direction_id: 1,
-                direction_text: 'SB',
-                schedule_relationship: 'Scheduled',
-              },
-              {
-                actual: false,
-                trip_id: '20247155-DEC21-RAIL-Weekday-01',
-                stop_id: 51405,
-                departure_text: '11:27',
-                departure_time: 1645550820,
-                description: 'to Mall of America',
-                route_id: '901',
-                route_short_name: 'Blue',
-                direction_id: 1,
-                direction_text: 'SB',
-                schedule_relationship: 'Scheduled',
-              },
             ],
           })
       }
     },
   })
-)
+) as jest.Mock
 
 describe('Home', () => {
   it('renders a heading', async () => {
@@ -161,12 +135,12 @@ describe('Home', () => {
         <Home
           routes={[
             {
-              route_id: 2,
+              route_id: '2',
               route_label: 'Pickles',
               agency_id: 2,
             },
             {
-              route_id: 3,
+              route_id: '3',
               route_label: 'Banana',
               agency_id: 3,
             },

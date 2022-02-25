@@ -1,4 +1,4 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# The NexTrip Duplicated App
 
 ## Getting Started
 
@@ -12,23 +12,20 @@ yarn dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Testing
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+To run the unit tests provided with this sample application use the follow:
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+```bash
+npm run test
+# or
+yarn test
+```
 
-## Learn More
+## Ways to optimize for scale
 
-To learn more about Next.js, take a look at the following resources:
+If more routes, directions or stops were added to the application you could optimize in several ways.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- If you wanted to reduce the amount of scrolling a user (optimizing for the user experience) you could add text fields and let them start typing and suggest possible routes, directions or stops that could be used.
+- If you were worried about <b>memory management</b> you could probably stick the information directly into the select fields instead of storing them in the store.
+- If you were worried about <b>getting too much data at once</b> from the apis you could do a pagination scheme and only grab so many items per call. Then do an endless scroll or a more button to grab more items.

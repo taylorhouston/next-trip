@@ -1,4 +1,3 @@
-import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useReducer, ChangeEvent, ChangeEventHandler } from 'react'
@@ -10,31 +9,32 @@ import { DepartureI } from '../_interfaces/DepartureI'
 import { DirectionI } from '../_interfaces/DirectionI'
 import { RouteI } from '../_interfaces/RouteI'
 import { StopI } from '../_interfaces/StopI'
-import {
-  infoReducer,
-  INFO_DIRECTION_UPDATE,
-  INFO_SET_CURRENT_ID,
-  INFO_STOP_UPDATE,
-  INFO_DEPARTURE_UPDATE,
-} from '../_reducers/infoReducer'
+import { infoReducer, InfoAction } from '../_reducers/infoReducer'
 import styles from '../styles/Home.module.css'
 
 interface PageProps {
   routes: RouteI[]
 }
 
-const Home: NextPage<RouteI[]> = ({ routes }: PageProps) => {
-  const [state, dispatch] = useReducer(infoReducer, { routes: routes })
+const Home: ({ routes }: PageProps) => JSX.Element = ({
+  routes,
+}: PageProps) => {
+  const [state, dispatch] = useReducer(infoReducer, {
+    routes: routes,
+  })
   const router = useRouter()
 
   useEffect(() => {
     const fetchDepartments = async () => {
-      const response: Response = await fetch(
+      const response = await fetch(
         `https://svc.metrotransit.org/nextripv2/${router.query.route}/${router.query.direction}/${router.query.stop}`
       )
 
-      const data: DepartureI[] = await response.json()
-      dispatch({ type: INFO_DEPARTURE_UPDATE, data })
+      const departures: DepartureI[] = await response.json()
+      dispatch({
+        type: InfoAction.DEPARTURE_UPDATE,
+        payload: departures,
+      })
     }
     if (router.query.route || router.query.direction) {
       fetchDepartments().catch(console.error)
@@ -44,15 +44,18 @@ const Home: NextPage<RouteI[]> = ({ routes }: PageProps) => {
   const onChange: ChangeEventHandler = async (
     e: ChangeEvent<HTMLInputElement>
   ) => {
-    const res: Response = await fetch(
+    const res = await fetch(
       `https://svc.metrotransit.org/nextripv2/directions/${e.currentTarget.value}`
-    ).catch(console.error)
-    const directions: [DirectionI] = await res.json()
-    dispatch({ type: INFO_DIRECTION_UPDATE, directions })
+    )
+    const directions: DirectionI[] = await res.json()
+
+    dispatch({ type: InfoAction.DIRECTION_UPDATE, payload: directions })
     dispatch({
-      type: INFO_SET_CURRENT_ID,
-      selected: 'Route',
-      id: e.target.value,
+      type: InfoAction.SET_CURRENT_ID,
+      payload: {
+        selected: 'Route',
+        id: e.target.value,
+      },
     })
   }
 
@@ -63,11 +66,13 @@ const Home: NextPage<RouteI[]> = ({ routes }: PageProps) => {
       `https://svc.metrotransit.org/nextripv2/stops/${state.selectedRoute}/${e.target.value}`
     )
     const stops: StopI[] = await res.json()
-    dispatch({ type: INFO_STOP_UPDATE, stops })
+    dispatch({ type: InfoAction.STOP_UPDATE, payload: stops })
     dispatch({
-      type: INFO_SET_CURRENT_ID,
-      selected: 'Direction',
-      id: e.target.value,
+      type: InfoAction.SET_CURRENT_ID,
+      payload: {
+        selected: 'Direction',
+        id: e.target.value,
+      },
     })
   }
 
@@ -80,6 +85,7 @@ const Home: NextPage<RouteI[]> = ({ routes }: PageProps) => {
       { shallow: true }
     )
   }
+
   return (
     <div className={styles.container}>
       <Head>

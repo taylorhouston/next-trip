@@ -1,34 +1,51 @@
+import { Reducer } from 'react'
 import { DepartureI } from '../_interfaces/DepartureI'
 import { DirectionI } from '../_interfaces/DirectionI'
 import { RouteI } from '../_interfaces/RouteI'
+import { SelectedInfo } from '../_interfaces/SelectedInfo'
 import { StateI } from '../_interfaces/StateI'
 import { StopI } from '../_interfaces/StopI'
 
-export const INFO_DIRECTION_UPDATE = 'INFO_DIRECTION_UPDATE'
-export const INFO_STOP_UPDATE = 'INFO_STOP_UPDATE'
-export const INFO_ROUTE_UPDATE = 'INFO_ROUTE_UPDATE'
-export const INFO_SET_CURRENT_ID = 'INFO_SET_CURRENT_ID'
-export const INFO_DEPARTURE_UPDATE = 'INFO_DEPARTURE_UPDATE'
+export enum InfoAction {
+  DIRECTION_UPDATE = 'DIRECTION_UPDATE',
+  STOP_UPDATE = 'STOP_UPDATE',
+  ROUTE_UPDATE = 'ROUTE_UPDATE',
+  SET_CURRENT_ID = 'SET_CURRENT_ID',
+  DEPARTURE_UPDATE = 'DEPARTURE_UPDATE',
+}
 
-export type Action =
-  | { type: typeof INFO_DIRECTION_UPDATE; directions: DirectionI[] }
-  | { type: typeof INFO_STOP_UPDATE; stops: StopI[] }
-  | { type: typeof INFO_ROUTE_UPDATE; routes: RouteI[] }
-  | { type: typeof INFO_DEPARTURE_UPDATE; data: { departures: DepartureI[] } }
-  | { type: typeof INFO_SET_CURRENT_ID; selected: string; id: string | number }
+type PayloadType =
+  | DirectionI[]
+  | StopI[]
+  | RouteI[]
+  | DepartureI[]
+  | SelectedInfo
 
-export const infoReducer = (state: StateI, action: Action) => {
+export type Action = {
+  type: InfoAction
+  payload: any
+}
+
+export const infoReducer: Reducer<StateI, Action> = (
+  state: StateI,
+  action: Action
+) => {
   switch (action.type) {
-    case INFO_DIRECTION_UPDATE:
-      return { ...state, directions: action.directions }
-    case INFO_STOP_UPDATE:
-      return { ...state, stops: action.stops }
-    case INFO_ROUTE_UPDATE:
-      return { ...state, routes: action.routes }
-    case INFO_DEPARTURE_UPDATE:
-      return { ...state, departures: action.data.departures }
-    case INFO_SET_CURRENT_ID:
-      return { ...state, [`selected${action.selected}`]: action.id }
+    case InfoAction.DIRECTION_UPDATE:
+      return { ...state, directions: action.payload }
+    case InfoAction.STOP_UPDATE:
+      return { ...state, stops: action.payload }
+    case InfoAction.ROUTE_UPDATE:
+      return { ...state, routes: action.payload }
+    case InfoAction.DEPARTURE_UPDATE:
+      return { ...state, departures: action.payload }
+    case InfoAction.SET_CURRENT_ID:
+      return {
+        ...state,
+        [`selected${
+          'selected' in action.payload ? action.payload.selected : ''
+        }`]: 'id' in action.payload ? action.payload.id : '',
+      }
     default:
       return state
   }

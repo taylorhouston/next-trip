@@ -20,17 +20,17 @@ describe('InfoSelectBox', () => {
       <InfoSelectBox
         selectLabel={'test'}
         onChange={testChange}
-        value=""
+        value="fakeValue"
         label="fakeLabel"
         data={testData}
       />
     )
-    UserEvent.selectOptions(screen.getByTestId('testSelect'), 'fake value 2')
     expect(testChange).toBeCalledTimes(0)
-    expect(
-      screen.getByRole('option', { name: 'this is another fake value' })
-        .selected
-    ).toBe(true)
+    UserEvent.selectOptions(screen.getByTestId('testSelect'), 'fake value 2')
+    const option = screen.getByRole('option', {
+      name: 'this is another fake value',
+    }) as HTMLOptionElement
+    expect(option.selected).toBe(true)
     expect(testChange).toBeCalled()
   })
 })
