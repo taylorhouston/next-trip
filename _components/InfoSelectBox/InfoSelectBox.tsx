@@ -21,7 +21,10 @@ export const InfoSelectBox = ({
       <Select$ onChange={onChange} data-testid={`${selectLabel}Select`}>
         <option value="">select {selectLabel}</option>
         {data.map((datum: any, index: number) => (
-          <option value={datum[value]} key={`${selectLabel}${index}`}>
+          <option
+            value={datum[value]}
+            key={`${selectLabel}${datum[value]}${index}`}
+          >
             {datum[label]}
           </option>
         ))}

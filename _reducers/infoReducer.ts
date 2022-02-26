@@ -12,14 +12,16 @@ export enum InfoAction {
   ROUTE_UPDATE = 'ROUTE_UPDATE',
   SET_CURRENT_ID = 'SET_CURRENT_ID',
   DEPARTURE_UPDATE = 'DEPARTURE_UPDATE',
+  STOP_CURRENT = 'STOP_CURRENT',
 }
 
-type PayloadType =
-  | DirectionI[]
-  | StopI[]
-  | RouteI[]
-  | DepartureI[]
-  | SelectedInfo
+// potential type for payload that didn't seem to work.
+// type PayloadType =
+//   | DirectionI[]
+//   | StopI[]
+//   | RouteI[]
+//   | DepartureI[]
+//   | SelectedInfo
 
 export type Action = {
   type: InfoAction
@@ -45,6 +47,11 @@ export const infoReducer: Reducer<StateI, Action> = (
         [`selected${
           'selected' in action.payload ? action.payload.selected : ''
         }`]: 'id' in action.payload ? action.payload.id : '',
+      }
+    case InfoAction.STOP_CURRENT:
+      return {
+        ...state,
+        currentStop: action.payload,
       }
     default:
       return state

@@ -11,5 +11,6 @@ export interface StateI {
   stops?: StopI[]
   departures?: DepartureI[]
   selectedStops?: number
+  currentStop?: string
   type?: string
 }

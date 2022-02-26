@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useReducer, ChangeEvent, ChangeEventHandler } from 'react'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import { DepartureTable } from '../_components/DepartureTable/DepartureTable'
 import { InfoSelectBox } from '../_components/InfoSelectBox/InfoSelectBox'
@@ -10,7 +10,6 @@ import { DirectionI } from '../_interfaces/DirectionI'
 import { RouteI } from '../_interfaces/RouteI'
 import { StopI } from '../_interfaces/StopI'
 import { infoReducer, InfoAction } from '../_reducers/infoReducer'
-import styles from '../styles/Home.module.css'
 
 interface PageProps {
   routes: RouteI[]
@@ -22,6 +21,7 @@ const Home: ({ routes }: PageProps) => JSX.Element = ({
   const [state, dispatch] = useReducer(infoReducer, {
     routes: routes,
   })
+  const intervalId = useRef<number>(-1)
   const router = useRouter()
 
   useEffect(() => {
@@ -29,15 +29,26 @@ const Home: ({ routes }: PageProps) => JSX.Element = ({
       const response = await fetch(
         `https://svc.metrotransit.org/nextripv2/${router.query.route}/${router.query.direction}/${router.query.stop}`
       )
+      const wholeJson = await response.json()
+      const currentStop = wholeJson.stops[0].description
+      const departures: DepartureI[] = wholeJson.departures
 
-      const departures: DepartureI[] = await response.json()
       dispatch({
         type: InfoAction.DEPARTURE_UPDATE,
         payload: departures,
       })
+      dispatch({
+        type: InfoAction.STOP_CURRENT,
+        payload: currentStop,
+      })
     }
+
     if (router.query.route || router.query.direction) {
+      intervalId.current !== -1
+        ? window.clearInterval(intervalId.current)
+        : (intervalId.current = -1)
       fetchDepartments().catch(console.error)
+      intervalId.current = window.setInterval(fetchDepartments, 30000)
     }
   }, [router.query.route, router.query.direction, router.query.stop])
 
@@ -55,6 +66,13 @@ const Home: ({ routes }: PageProps) => JSX.Element = ({
       payload: {
         selected: 'Route',
         id: e.target.value,
+      },
+    })
+    dispatch({
+      type: InfoAction.SET_CURRENT_ID,
+      payload: {
+        selected: 'Direction',
+        id: '',
       },
     })
   }
@@ -87,13 +105,13 @@ const Home: ({ routes }: PageProps) => JSX.Element = ({
   }
 
   return (
-    <div className={styles.container}>
+    <PageContainer$>
       <Head>
         <title>Nextrip Duplicate</title>
         <meta name="description" content="Nextrip Duplicate" />
       </Head>
 
-      <main className={styles.main}>
+      <Main$>
         <SelectBoxContainer$>
           <InfoSelectBox
             selectLabel="route"
@@ -124,14 +142,27 @@ const Home: ({ routes }: PageProps) => JSX.Element = ({
 
         {state.departures && (
           <TableContainer$>
-            <H2$>Station</H2$>
+            <H2$>{state.currentStop}</H2$>
             <DepartureTable departures={state.departures} />
           </TableContainer$>
         )}
-      </main>
-    </div>
+      </Main$>
+    </PageContainer$>
   )
 }
+const PageContainer$ = styled.div`
+  padding: 0 2rem;
+`
+const Main$ = styled.main`
+  min-height: 100vh;
+  padding: 4rem 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`
+
 const SelectBoxContainer$ = styled.div`
   width: 400px;
 `
