@@ -1,10 +1,5 @@
 import { Reducer } from 'react'
-import { DepartureI } from '../_interfaces/DepartureI'
-import { DirectionI } from '../_interfaces/DirectionI'
-import { RouteI } from '../_interfaces/RouteI'
-import { SelectedInfo } from '../_interfaces/SelectedInfo'
 import { StateI } from '../_interfaces/StateI'
-import { StopI } from '../_interfaces/StopI'
 
 export enum InfoAction {
   DIRECTION_UPDATE = 'DIRECTION_UPDATE',

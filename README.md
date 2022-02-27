@@ -1,4 +1,4 @@
-# The NexTrip Duplicated App
+# NexTrip Duplicated App
 
 ## Getting Started
 
@@ -21,6 +21,13 @@ npm run test
 # or
 yarn test
 ```
+
+## Assumptions
+
+- The data from Metro Transit will continue to be consistent into the future and follow its own NexTrip API documentation, so I didn't have to litter my code with if statements checking for that consistency.
+- Metro Transit will remain online.
+- The size of the application is unlikely grow much larger than it is allowing me to use some methods that would probably grow to be painful. (example createMockFetch)
+- The best way to display this data is similar to what Metro Transit has already setup.
 
 ## Ways to optimize for scale
 

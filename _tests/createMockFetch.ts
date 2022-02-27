@@ -15,10 +15,28 @@ export const createMockFetch = jest.fn((url: string) =>
               agency_id: 3,
             },
           ])
+        case 'https://svc.metrotransit.org/nextripv2/directions/2':
+          return Promise.resolve([
+            {
+              direction_id: 1,
+              direction_name: 'East',
+              agency_id: 3,
+            },
+            {
+              direction_id: 3,
+              direction_name: 'West',
+              agency_id: 4,
+            },
+          ])
         case 'https://svc.metrotransit.org/nextripv2/stops/3/3':
           return Promise.resolve([
             { place_code: 'ICE', description: 'Tundra' },
             { place_code: 'SWT', description: 'Sweet Chocolate' },
+          ])
+        case 'https://svc.metrotransit.org/nextripv2/stops/2/1':
+          return Promise.resolve([
+            { place_code: 'ICEF', description: 'Fargo' },
+            { place_code: 'BIT', description: 'Bitter Chocolate' },
           ])
         case 'https://svc.metrotransit.org/nextripv2/1/1/ICE':
           return Promise.resolve({
@@ -111,6 +129,19 @@ export const createMockFetch = jest.fn((url: string) =>
                 schedule_relationship: 'Scheduled',
               },
             ],
+          })
+        case 'https://svc.metrotransit.org/nextripv2/2/1/ICEF':
+          return Promise.resolve({
+            stops: [
+              {
+                stop_id: 51405,
+                latitude: 44.854277,
+                longitude: -93.238877,
+                description: 'MOA Transit Station',
+              },
+            ],
+            alerts: [],
+            departures: [],
           })
       }
     },

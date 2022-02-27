@@ -1,15 +1,14 @@
 import type { AppProps } from 'next/app'
 import { ThemeProvider, createGlobalStyle } from 'styled-components'
+import { theme } from '../theme'
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const theme = {}
   const GlobalStyle = createGlobalStyle`
     html,
     body {
       padding: 0;
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-      Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+      font-family: Verdana, Arial, sans-serif;
     }
 
     a {
@@ -24,9 +23,12 @@ function MyApp({ Component, pageProps }: AppProps) {
   `
 
   return (
-    <ThemeProvider theme={theme}>
-      <Component {...pageProps} />
-    </ThemeProvider>
+    <>
+      <GlobalStyle />
+      <ThemeProvider theme={theme}>
+        <Component {...pageProps} />
+      </ThemeProvider>
+    </>
   )
 }
 

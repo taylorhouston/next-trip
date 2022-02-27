@@ -23,7 +23,7 @@ export const InfoSelectBox = ({
         {data.map((datum: any, index: number) => (
           <option
             value={datum[value]}
-            key={`${selectLabel}${datum[value]}${index}`}
+            key={`${selectLabel}${datum[label]}${index}`}
           >
             {datum[label]}
           </option>
@@ -34,6 +34,7 @@ export const InfoSelectBox = ({
 }
 
 const Select$ = styled.select`
+  margin-top: 4px;
   height: 40px;
   font-size: 16px;
 `

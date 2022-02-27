@@ -68,13 +68,6 @@ const Home: ({ routes }: PageProps) => JSX.Element = ({
         id: e.target.value,
       },
     })
-    dispatch({
-      type: InfoAction.SET_CURRENT_ID,
-      payload: {
-        selected: 'Direction',
-        id: '',
-      },
-    })
   }
 
   const onChangeDirection: ChangeEventHandler = async (
@@ -140,11 +133,15 @@ const Home: ({ routes }: PageProps) => JSX.Element = ({
           )}
         </SelectBoxContainer$>
 
-        {state.departures && (
+        {state.departures && state.departures.length > 0 && (
           <TableContainer$>
             <H2$>{state.currentStop}</H2$>
             <DepartureTable departures={state.departures} />
           </TableContainer$>
+        )}
+
+        {state.departures && state.departures.length === 0 && (
+          <H2$>Sadly, no results were found here.</H2$>
         )}
       </Main$>
     </PageContainer$>
@@ -168,11 +165,13 @@ const SelectBoxContainer$ = styled.div`
 `
 const H2$ = styled.h2`
   padding: 10px;
+  font-size: 20px;
+  margin: 8px 0;
 `
 
 const TableContainer$ = styled.div`
-  background-color: #f1f1f1;
-  max-width: 600px;
+  background-color: #eeeeee;
+  max-width: 700px;
   width: 100%;
   margin: 10px;
 `
